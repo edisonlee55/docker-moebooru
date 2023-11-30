@@ -12,6 +12,7 @@ services:
       - 8080:3000
     volumes:
       - ./data/moebooru:/data
+      - ./data/moebooru-public:/moebooru/public/data
       - ./config/database.yml:/moebooru/config/database.yml:ro
       - ./config/local_config.rb:/moebooru/config/local_config.rb:ro
     depends_on:
