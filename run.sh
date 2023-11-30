@@ -1,12 +1,11 @@
-if [ ! -d /data/app ]; then
-    echo "Cannot find server folder in /data. Initialize moebooru."
-    bundle install
-    mv /moebooru/* /data/
-    mv /moebooru/.git /data
-    cd /data
+#!/bin/sh
+
+if [ ! -e /data/inited ]; then
+    echo "Initialize moebooru. Reseting database..."
     bundle exec rake db:reset
     bundle exec rake db:migrate
+    touch /data/inited
 fi
 
-cd /data
-bundle exec unicorn
+bundle exec rails assets:precompile
+bundle exec rails server

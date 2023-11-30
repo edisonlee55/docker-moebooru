@@ -6,30 +6,30 @@ services:
     environment:
       - MB_DATABASE_URL=postgres://moebooru:moebooru@postgres:5432/moebooru
       - MB_MEMCACHE_SERVERS=memcached:11211
+      - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
     ports:
-      - 8080:8080
-    networks:
-      - default
-      - backend
+      - 8080:3000
     volumes:
-      - /docker/moebooru/data:/data
+      - ./data/moebooru:/data
+      - ./config/database.yml:/moebooru/config/database.yml:ro
+      - ./config/local_config.rb:/moebooru/config/local_config.rb:ro
     depends_on:
-      - postgres
-      - memcached
+      postgres:
+        condition: service_healthy
+      memcached:
+        condition: service_started
   postgres:
-    image: postgres:alpine
+    image: postgres:15-alpine
     environment:
       - POSTGRES_USER=moebooru
       - POSTGRES_PASSWORD=moebooru
     volumes:
-      - /docker/moebooru/database:/var/lib/postgresql/data
-    networks:
-      - backend
+      - ./data/database:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U moebooru" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   memcached:
-    image: memcached:1.5-alpine
-    networks:
-      - backend
-networks:
-  backend:
-    driver: bridge
-    internal: True
+    image: memcached:alpine
