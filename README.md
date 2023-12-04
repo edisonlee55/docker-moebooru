@@ -27,7 +27,7 @@ $ docker compose up -d
 You might need to wait for 5 ~ 10 minutes for assets precompile.
 
 
-Shutdown:
+Stop:
 ```bash
-$ docker compose down
+$ docker compose stop
 ```
