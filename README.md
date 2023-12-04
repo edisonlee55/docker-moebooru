@@ -7,6 +7,9 @@ Dockerfile for [moebooru](https://github.com/moebooru/moebooru)
 $ git submodule update --init --recursive
 ```
 
+## Setup environment variables
+1. Copy `.env.example` to `.env` and edit it.
+
 ## Setup config files
 1. Copy `moebooru/config/database.yml.example` to `config/database.yml` and edit it.
 2. Copy `moebooru/config/local_config.rb.example` to `config/local_config.rb` and edit it.

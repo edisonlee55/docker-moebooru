@@ -4,12 +4,12 @@ services:
     build:
       context: .
     environment:
-      - MB_DATABASE_URL=postgres://moebooru:moebooru@postgres:5432/moebooru
+      - MB_DATABASE_URL=postgres://${POSTGRES_USER:-moebooru}:${POSTGRES_PASSWORD:-moebooru}@postgres:5432/moebooru
       - MB_MEMCACHE_SERVERS=memcached:11211
       - RAILS_ENV=production
       - RAILS_SERVE_STATIC_FILES=true
     ports:
-      - 8080:3000
+      - ${PORT:-8080}:3000
     volumes:
       - ./data/moebooru:/data
       - ./data/moebooru-public:/moebooru/public/data
@@ -23,12 +23,12 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_USER=moebooru
-      - POSTGRES_PASSWORD=moebooru
+      - POSTGRES_USER=${POSTGRES_USER:-moebooru}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-moebooru}
     volumes:
       - ./data/database:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U moebooru" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-moebooru}" ]
       interval: 5s
       timeout: 5s
       retries: 10
